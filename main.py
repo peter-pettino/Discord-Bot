@@ -1,4 +1,3 @@
-from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
 import nextcord
 from keep_alive import keep_alive
@@ -15,10 +14,5 @@ async def on_ready():
 for fn in os.listdir("./cogs"):
     if fn.endswith(".py"):
         bot.load_extension(f"cogs.{fn[:-3]}")
-
-@bot.slash_command(description="Reloads an extension")
-async def reload(interaction: Interaction, extension: str = SlashOption(description="Enter extension name")):
-    bot.reload_extension(f"cogs.{extension}")
-    await interaction.send(f"Reloaded `{extension}.py`")
 
 bot.run(os.environ.get("TOKEN"))
