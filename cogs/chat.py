@@ -21,7 +21,7 @@ class Chat(commands.Cog):
                     "messages": [{"role": "user", "content": prompt}]
                 }
 
-                headers = {"Authorization": f"Bearer {os.environ.get("CHATAPI")}"}
+                headers = {"Authorization": f"Bearer {os.environ.get('CHATAPI')}"}
         
                 async with session.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers) as resp:
                     response = await resp.json()
