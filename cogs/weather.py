@@ -45,7 +45,7 @@ class Weather(commands.Cog):
                 humidity = data["current"]["humidity"]
                 uv = data["current"]["uv"]
 
-                embed = nextcord.Embed(title=f"Weather for {name}, {country}", description=f"The condition in `{name}` is `{condition}`\nLocal time: `{localtime}`")
+                embed = nextcord.Embed(title=f"Weather for {name}, {country}", description=f"The condition in `{name}` is `{condition}`\nLocal time: `{localtime}`", timestamp=datetime.fromtimestamp(last_updated_epoch))
                 embed.add_field(name="Temperature", value=f"{temp_c} °C | {temp_f} °F")
                 embed.add_field(name="Humidity", value=f"{humidity}%")
                 embed.add_field(name="UV Index", value=f"{uv}")
@@ -53,7 +53,6 @@ class Weather(commands.Cog):
                 embed.add_field(name="Precipitation", value=f"{precip_mm} mm | {precip_in} in")
                 embed.set_thumbnail(url=image_url)
                 embed.set_footer(text="Last Updated")
-                embed.timestamp = datetime.fromtimestamp(last_updated_epoch)
                 if is_day == 1:
                     embed.color = 0xFDFD96
                 else:
