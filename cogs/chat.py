@@ -17,15 +17,20 @@ class Chat(commands.Cog):
                 prompt = " ".join(word for word in message.content.split() if word != f"<@{self.bot.user.id}>")
 
                 payload = {
-                    "model": "mistralai/mistral-7b-instruct:free",
-                    "messages": [{"role": "user", "content": prompt}]
+                    "model": "nousresearch/nous-capybara-7b:free",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "max_tokens": 500,
+                    "temperature": 1
                 }
-
+                
                 headers = {"Authorization": f"Bearer {os.environ.get('CHATAPI')}"}
         
-                async with session.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers) as resp:
-                    response = await resp.json()
-                    await message.channel.send(response["choices"][0]["message"]["content"])
+                try:
+                    async with session.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30) as resp:
+                        response = await resp.json()
+                        await message.channel.send(response["choices"][0]["message"]["content"])
+                except Exception:
+                    await message.reply("Sorry, I'm taking too long to respond, try again soon.")
 
 def setup(bot):
     bot.add_cog(Chat(bot))
