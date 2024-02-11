@@ -52,7 +52,7 @@ class Weather(commands.Cog):
                 embed.add_field(name="Wind", value=f"{wind_kph} KPH | {wind_mph} MPH")
                 embed.add_field(name="Precipitation", value=f"{precip_mm} mm | {precip_in} in")
                 embed.set_thumbnail(url=image_url)
-                embed.set_footer(text="⏰ Last Updated")
+                embed.set_footer(text="Last Updated")
                 if is_day == 1:
                     embed.color = 0xF1C40F
                 else:
