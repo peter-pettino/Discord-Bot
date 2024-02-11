@@ -1,5 +1,5 @@
 from nextcord.ext import commands
-from config import CHATAPI
+import os
 
 import aiohttp
 
@@ -15,9 +15,9 @@ class Chat(commands.Cog):
         if self.bot.user.mentioned_in(message):
             async with aiohttp.ClientSession() as session:
                 await message.channel.trigger_typing()
-
-                prompt = " ".join(word for word in message.content.split() if word != f"<@{self.bot.user.id}>")
                 
+                prompt = " ".join(word for word in message.content.split() if word != f"<@{self.bot.user.id}>")
+
                 payload = {
                     "model": "nousresearch/nous-capybara-7b:free",
                     "messages": [{"role": "user", "content": prompt}],
@@ -25,7 +25,7 @@ class Chat(commands.Cog):
                     "temperature": 1
                 }
 
-                headers = {"Authorization": f"Bearer {CHATAPI}"}
+                headers = {"Authorization": f"Bearer {os.environ.get('CHATAPI')}"}
 
                 try:
                     async with session.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30) as resp:
@@ -33,7 +33,6 @@ class Chat(commands.Cog):
                         await message.channel.send(response["choices"][0]["message"]["content"])
                 except Exception:
                     await message.reply("Sorry, I'm taking too long to respond, try again soon.")
-
 
 def setup(bot):
     bot.add_cog(Chat(bot))
