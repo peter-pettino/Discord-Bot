@@ -28,7 +28,7 @@ class Weather(commands.Cog):
                 try:
                     name = data["location"]["name"]
                 except KeyError:
-                    return await interaction.send("Enter a valid location", ephemeral=True)
+                    return await interaction.send(embed=nextcord.Embed(description=f"⚠️ `{location}` is not a valid location", color=0xED4245), ephemeral=True)
                 
                 country = data["location"]["country"]
                 localtime = data["location"]["localtime"]
