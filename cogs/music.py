@@ -37,7 +37,7 @@ class Music(commands.Cog):
             await vc.play(next_song)
 
     @staticmethod
-    async def check_voice_state(self, interaction: Interaction):
+    async def check_voice_state(interaction: Interaction):
         if not getattr(interaction.user.voice, "channel", None):
             await interaction.send(embed=nextcord.Embed(description=f"🚫 You must be connected to a voice channel to use this command", color=0xED4245), ephemeral=True)
             return False
