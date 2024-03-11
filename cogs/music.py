@@ -8,13 +8,13 @@ from pytube import YouTube
 
 class Music(commands.Cog):
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot):
         self.bot = bot
         bot.loop.create_task(self.node_connect())
 
     async def node_connect(self):
         await self.bot.wait_until_ready()
-        await nextwave.NodePool.create_node(bot=self.bot, host="lavalink3-netherlands.alfari.id", port=80, password="catfein", https=False)
+        await nextwave.NodePool.create_node(bot=self.bot, host="lavalink.devamop.in", port=80, password="DevamOP", https=False)
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
