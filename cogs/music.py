@@ -14,7 +14,7 @@ class Music(commands.Cog):
 
     async def node_connect(self):
         await self.bot.wait_until_ready()
-        await nextwave.NodePool.create_node(bot=self.bot, host="lavalink.devamop.in", port=80, password="DevamOP", https=False)
+        await nextwave.NodePool.create_node(bot=self.bot, host="lavalink.devamop.in", port=80, password="DevamOP")
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member, before, after):
