@@ -11,7 +11,7 @@ class Weather(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @nextcord.slash_command(description="Retrieves current weather information for a specific location")
+    @nextcord.slash_command(description="Retrieve current weather information for a specific location")
     async def weather(self, interaction: Interaction, location: str = SlashOption(description="Enter a location")):
 
         url = "https://api.weatherapi.com/v1/current.json"
