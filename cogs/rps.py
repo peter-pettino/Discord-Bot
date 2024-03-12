@@ -55,11 +55,8 @@ class RPS(commands.Cog):
             return await interaction.send(embed=nextcord.Embed(description=f"❌ You cannot challenge bots", color=0xED4245), ephemeral=True)
 
         embed = nextcord.Embed(title="Rock Paper Scissors", description=f"🎲 {interaction.user.mention} has challenged you to a game of **Rock Paper Scissors**", color=0xF1C40F)
-        view = Buttons(interaction.user, opponent)
         embed.set_footer(text=f"{interaction.user} vs {opponent}")
-        embed.add_field(name=view.player1, value="❓")
-        embed.add_field(name="VS", value="⚡")
-        embed.add_field(name=view.player2, value="❓")
+        view = Buttons(interaction.user, opponent)
         message = await interaction.send(f"{interaction.user.mention} {opponent.mention}", embed=embed, view=view)
         await view.wait()
 
@@ -72,8 +69,9 @@ class RPS(commands.Cog):
             ("✋", "✌"): view.player2,
         }
 
-        embed.set_field_at(index=0, name=view.player1, value=view.choice1) if view.choice1 is not None else None
-        embed.set_field_at(index=2, name=view.player2, value=view.choice2) if view.choice2 is not None else None
+        embed.add_field(name=view.player1, value=view.choice1) if view.choice1 is not None else "❓"
+        embed.add_field(name="VS", value="⚡")
+        embed.add_field(name=view.player2, value=view.choice2) if view.choice2 is not None else "❓"
         if view.choice1 == view.choice2:
             embed.description = f"😱 Game ended in a draw"
             return await message.edit(embed=embed, view=None)
@@ -82,9 +80,8 @@ class RPS(commands.Cog):
             return await message.edit(embed=embed, view=None)
         else:
             winner = outcomes[(view.choice1, view.choice2)]
-
-        embed.description = f"🥳 {winner.mention} has won the game"
-        await message.edit(embed=embed, view=None)
+            embed.description = f"🥳 {winner.mention} has won the game"
+            await message.edit(embed=embed, view=None)
 
 def setup(bot):
     bot.add_cog(RPS(bot))
