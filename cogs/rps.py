@@ -4,7 +4,7 @@ import nextcord
 
 class Buttons(nextcord.ui.View):
     def __init__(self, player1, player2):
-        super().__init__()
+        super().__init__(timeout=30)
         self.player1 = player1
         self.player2 = player2
         self.choice1 = None
