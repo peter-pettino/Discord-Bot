@@ -39,13 +39,13 @@ class Music(commands.Cog):
     @staticmethod
     async def check_voice_state(interaction: Interaction):
         if not getattr(interaction.user.voice, "channel", None):
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 You must be connected to a voice channel to use this command", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ You must be connected to a voice channel to use this command", color=0xED4245), ephemeral=True)
             return False
         elif not interaction.guild.voice_client:
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player must already be in a voice channel to use this command", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player must already be in a voice channel to use this command", color=0xED4245), ephemeral=True)
             return False
         elif interaction.user.voice.channel != interaction.guild.voice_client.channel:
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 You must be connected to `{interaction.guild.voice_client.channel}` to use this command", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ You must be connected to `{interaction.guild.voice_client.channel}` to use this command", color=0xED4245), ephemeral=True)
             return False
         else:
             return True
@@ -55,14 +55,14 @@ class Music(commands.Cog):
         try:
             search = await nextwave.YouTubeTrack.search(query=search, return_first=True)
         except IndexError:
-            return await interaction.send(embed=nextcord.Embed(description=f"⚠️ `{search}` is not a valid link or search query", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description=f"❌ `{search}` is not a valid link or search query", color=0xED4245), ephemeral=True)
 
         if not getattr(interaction.user.voice, "channel", None):
-            return await interaction.send(embed=nextcord.Embed(description=f"🚫 You must be connected to a voice channel to use this command", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description=f"❌ You must be connected to a voice channel to use this command", color=0xED4245), ephemeral=True)
         elif not interaction.guild.voice_client:
             vc: nextwave.Player = await interaction.user.voice.channel.connect(cls=nextwave.Player)
         elif interaction.user.voice.channel != interaction.guild.voice_client.channel:
-            return await interaction.send(embed=nextcord.Embed(description=f"🚫 You must be connected to `{interaction.guild.voice_client.channel}` to use this command", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description=f"❌ You must be connected to `{interaction.guild.voice_client.channel}` to use this command", color=0xED4245), ephemeral=True)
         else:
             vc: nextwave.Player = interaction.guild.voice_client
 
@@ -88,9 +88,9 @@ class Music(commands.Cog):
         vc: nextwave.Player = interaction.guild.voice_client
 
         if not vc.is_playing():
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player is currently not playing anything", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player is currently not playing anything", color=0xED4245), ephemeral=True)
         elif vc.is_paused():
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player is currently paused", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player is currently paused", color=0xED4245), ephemeral=True)
         else:
             await vc.pause()
             await interaction.send(embed=nextcord.Embed(description=f"⏸️ Player has been paused", color=0x1DB954))
@@ -102,9 +102,9 @@ class Music(commands.Cog):
         vc: nextwave.Player = interaction.guild.voice_client
 
         if not vc.is_playing():
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player is currently not playing anything", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player is currently not playing anything", color=0xED4245), ephemeral=True)
         elif not vc.is_paused():
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player is currently playing", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player is currently playing", color=0xED4245), ephemeral=True)
         else:
             await vc.resume()
             await interaction.send(embed=nextcord.Embed(description=f"▶️ Player has been resumed", color=0x1DB954))
@@ -116,7 +116,7 @@ class Music(commands.Cog):
         vc: nextwave.Player = interaction.guild.voice_client
 
         if not vc.is_playing():
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player is currently not playing anything", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player is currently not playing anything", color=0xED4245), ephemeral=True)
         else:
             await interaction.send(embed=nextcord.Embed(description=f"⏭️ `{vc.track}` has been skipped", color=0x1DB954))
             setattr(vc, "loop", False)
@@ -144,7 +144,7 @@ class Music(commands.Cog):
             setattr(vc, "loop", False)
 
         if not vc.is_playing():
-            await interaction.send(embed=nextcord.Embed(description=f"🚫 The player is currently not playing anything", color=0xED4245), ephemeral=True)
+            await interaction.send(embed=nextcord.Embed(description=f"❌ The player is currently not playing anything", color=0xED4245), ephemeral=True)
         elif vc.loop:
             await interaction.send(embed=nextcord.Embed(description=f"🔁 Loop is enabled for `{vc.track}`", color=0x1DB954))
         else:
@@ -153,11 +153,11 @@ class Music(commands.Cog):
     @nextcord.slash_command(description=f"View the tracks currently in queue")
     async def queue(self, interaction: Interaction):
         if not interaction.guild.voice_client:
-            return await interaction.send(embed=nextcord.Embed(description=f"🚫 The player must already be in a voice channel to use this command", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description=f"❌ The player must already be in a voice channel to use this command", color=0xED4245), ephemeral=True)
         vc: nextwave.Player = interaction.guild.voice_client
 
         if vc.queue.is_empty:
-            return await interaction.send(embed=nextcord.Embed(description="🚫 The queue is empty", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description="❌ The queue is empty", color=0xED4245), ephemeral=True)
         
         embed = nextcord.Embed(title="Current Queue", color=0x1DB954)
         queue = vc.queue.copy()
@@ -171,11 +171,11 @@ class Music(commands.Cog):
     @nextcord.slash_command(description=f"View the current track")
     async def nowplaying(self, interaction: Interaction):
         if not interaction.guild.voice_client:
-            return await interaction.send(embed=nextcord.Embed(description=f"🚫 The player must already be in a voice channel to use this command", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description=f"❌ The player must already be in a voice channel to use this command", color=0xED4245), ephemeral=True)
         vc: nextwave.Player = interaction.guild.voice_client
 
         if not vc.is_playing():
-            return await interaction.send(embed=nextcord.Embed(description="🚫 The player is currently not playing anything", color=0xED4245), ephemeral=True)
+            return await interaction.send(embed=nextcord.Embed(description="❌ The player is currently not playing anything", color=0xED4245), ephemeral=True)
         
         thumbnail = YouTube(vc.track.uri).thumbnail_url
         embed = nextcord.Embed(title=f"Now Playing", color=0x1DB954)
