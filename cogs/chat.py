@@ -2,6 +2,7 @@ from nextcord.ext import commands
 import os
 
 import aiohttp
+import textwrap
 
 class Chat(commands.Cog):
     def __init__(self, bot):
@@ -21,7 +22,6 @@ class Chat(commands.Cog):
                 payload = {
                     "model": "nousresearch/nous-capybara-7b:free",
                     "messages": [{"role": "user", "content": prompt}],
-                    "max_tokens": 500,
                     "temperature": 1
                 }
 
@@ -30,7 +30,9 @@ class Chat(commands.Cog):
                 try:
                     async with session.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers, timeout=30) as resp:
                         response = await resp.json()
-                        await message.channel.send(response["choices"][0]["message"]["content"])
+                        response = response["choices"][0]["message"]["content"]
+                        for chunk in textwrap.wrap(response, width=2000):
+                            await message.channel.send(chunk)
                 except Exception:
                     await message.reply("Sorry, I'm taking too long to respond, try again soon.")
 
