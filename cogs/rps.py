@@ -2,25 +2,7 @@ from nextcord import Interaction, SlashOption
 from nextcord.ext import commands
 import nextcord
 
-class Request(nextcord.ui.View):
-    def __init__(self, opponent):
-        super().__init__()
-        self.value = None
-        self.opponent = opponent
-
-    @nextcord.ui.button(label="✔ Accept", style=nextcord.ButtonStyle.green)
-    async def accept(self, button: nextcord.ui.Button, interaction: Interaction):
-        if interaction.user == self.opponent:
-            self.value = True
-            self.stop()
-
-    @nextcord.ui.button(label="✖ Decline", style=nextcord.ButtonStyle.red)
-    async def decline(self, button: nextcord.ui.Button, interaction: Interaction):
-        if interaction.user == self.opponent:
-            self.value = False
-            self.stop()
-
-class Options(nextcord.ui.View):
+class Buttons(nextcord.ui.View):
     def __init__(self, player1, player2):
         super().__init__()
         self.player1 = player1
@@ -72,26 +54,13 @@ class RPS(commands.Cog):
         elif opponent.bot:
             return await interaction.send(embed=nextcord.Embed(description=f"❌ You cannot challenge bots", color=0xED4245), ephemeral=True)
 
-
         embed = nextcord.Embed(title="Rock Paper Scissors", description=f"🎲 {interaction.user.mention} has challenged you to a game of **Rock Paper Scissors**", color=0xF1C40F)
+        view = Buttons(interaction.user, opponent)
         embed.set_footer(text=f"{interaction.user} vs {opponent}")
-        view = Request(opponent)
-        message = await interaction.send(f"{interaction.user.mention} {opponent.mention}", embed=embed, view=view)
-        await view.wait()
-
-        if view.value == None:
-            embed.description = f"❌ {opponent.mention} did not respond in time"
-            return await message.edit(embed=embed, view=None)
-        elif view.value == False:
-            embed.description = f"❌ {opponent.mention} has declined to challenge {interaction.user.mention}"
-            return await message.edit(embed=embed, view=None)
-
-        embed.description = f"⏰ Waiting for both players..."
-        view = Options(interaction.user, opponent)
         embed.add_field(name=view.player1, value="❓")
         embed.add_field(name="VS", value="⚡")
         embed.add_field(name=view.player2, value="❓")
-        await message.edit(embed=embed, view=view)
+        message = await interaction.send(f"{interaction.user.mention} {opponent.mention}", embed=embed, view=view)
         await view.wait()
 
         outcomes = {
@@ -108,10 +77,13 @@ class RPS(commands.Cog):
         if view.choice1 == view.choice2:
             embed.description = f"😱 Game ended in a draw"
             return await message.edit(embed=embed, view=None)
+        elif view.choice1 == None or view.choice2 == None:
+            embed.description = f"⏰ {view.player1.mention if view.choice1 is None else view.player2.mention} did not respond in time"
+            return await message.edit(embed=embed, view=None)
         else:
-            winner = view.player1 if not view.choice2 else view.player2 if not view.choice1 else outcomes[(view.choice1, view.choice2)]
-        
-        embed.description = f"🥳 {winner} has won the game"
+            winner = outcomes[(view.choice1, view.choice2)]
+
+        embed.description = f"🥳 {winner.mention} has won the game"
         await message.edit(embed=embed, view=None)
 
 def setup(bot):
