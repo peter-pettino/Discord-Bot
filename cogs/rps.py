@@ -69,9 +69,12 @@ class RPS(commands.Cog):
             ("✋", "✌"): view.player2,
         }
 
-        embed.add_field(name=view.player1, value=view.choice1) if view.choice1 is not None else "❓"
+        choice1= view.choice1 if view.choice1 is not None else "❓"
+        choice2= view.choice1 if view.choice1 is not None else "❓"
+        embed.add_field(name=view.player1, value=choice1)
         embed.add_field(name="VS", value="⚡")
-        embed.add_field(name=view.player2, value=view.choice2) if view.choice2 is not None else "❓"
+        embed.add_field(name=view.player2, value=choice2)
+        
         if view.choice1 == view.choice2:
             embed.description = f"😱 Game ended in a draw"
             return await message.edit(embed=embed, view=None)
