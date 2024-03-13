@@ -79,7 +79,7 @@ class RPS(commands.Cog):
             embed.description = f"😱 Game ended in a draw"
             return await message.edit(embed=embed, view=None)
         elif view.choice1 == None or view.choice2 == None:
-            embed.description = f"⏰ {view.player1.mention if view.choice1 is None else view.player2.mention} did not respond in time"
+            embed.description = f"😴 {view.player1.mention if view.choice1 is None else view.player2.mention} did not respond in time"
             return await message.edit(embed=embed, view=None)
         else:
             winner = outcomes[(view.choice1, view.choice2)]
