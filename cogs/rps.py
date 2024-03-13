@@ -70,7 +70,7 @@ class RPS(commands.Cog):
         }
 
         choice1= view.choice1 if view.choice1 is not None else "❓"
-        choice2= view.choice1 if view.choice1 is not None else "❓"
+        choice2= view.choice2 if view.choice2 is not None else "❓"
         embed.add_field(name=view.player1, value=choice1)
         embed.add_field(name="VS", value="⚡")
         embed.add_field(name=view.player2, value=choice2)
