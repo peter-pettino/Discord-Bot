@@ -21,8 +21,9 @@ class Music(commands.Cog):
         if member != self.bot.user:
             if before.channel is not None and len(before.channel.members) == 1:
                 vc = before.channel.guild.voice_client
-                await vc.stop()
-                await vc.disconnect()
+                if vc:
+                    await vc.stop()
+                    await vc.disconnect()
         
     @commands.Cog.listener()
     async def on_nextwave_track_end(self, player: nextwave.Player, track: nextwave.Track, reason):
