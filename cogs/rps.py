@@ -30,12 +30,12 @@ class Buttons(nextcord.ui.View):
         if self.choice1 is not None and self.choice2 is not None:
             self.stop()
 
-    @nextcord.ui.button(label="✌ Scissors", style=nextcord.ButtonStyle.blurple)
+    @nextcord.ui.button(label="✌️ Scissors", style=nextcord.ButtonStyle.blurple)
     async def scissors(self, button: nextcord.ui.Button, interaction: Interaction):
         if interaction.user == self.player1:
-            self.choice1 = "✌"
+            self.choice1 = "✌️"
         elif interaction.user == self.player2:
-            self.choice2 = "✌"
+            self.choice2 = "✌️"
 
         if self.choice1 is not None and self.choice2 is not None:
             self.stop()
@@ -61,12 +61,12 @@ class RPS(commands.Cog):
         await view.wait()
 
         outcomes = {
-            ("👊", "✌"): view.player1,
+            ("👊", "✌️"): view.player1,
             ("✋", "👊"): view.player1,
-            ("✌", "✋"): view.player1,
-            ("✌", "👊"): view.player2,
+            ("✌️", "✋"): view.player1,
+            ("✌️", "👊"): view.player2,
             ("👊", "✋"): view.player2,
-            ("✋", "✌"): view.player2,
+            ("✋", "✌️"): view.player2,
         }
 
         choice1= view.choice1 if view.choice1 is not None else "❓"
